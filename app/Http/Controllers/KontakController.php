@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\jenis_kontak;
 use App\Models\kontak;
+use App\Models\siswa;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
+use Session;
+
 class KontakController extends Controller
 {
     /**
@@ -13,10 +15,15 @@ class KontakController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // public function __construct()
+    // {
+    //     $this->middleware('admin')->except('index', 'show');
+    // }
     public function index()
     {
-        $data = jenis_kontak::all();
-        return view('masterkontak', compact('data', 'jenis_kontak'));
+        $student = siswa::paginate(7);
+        $jenis_kontak = jenis_kontak::all();
+        return view('masterkontak', compact('student', 'jenis_kontak'));
     }
 
     /**
@@ -25,12 +32,16 @@ class KontakController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-
-        $siswa=siswa::find($id);
-        return view('TambahKontak', compact('siswa'));
+    { $siswa = siswa::find($id);
+        $jenis_kontak = jenis_kontak::all();
+        return view('TambahKontak', compact('siswa', 'jenis_kontak'));
     }
 
+
+    public function tambah($id)
+    {
+       
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -39,21 +50,20 @@ class KontakController extends Controller
      */
     public function store(Request $request)
     {
+        
         $message = [
             'required' => ':attribute harus diisi gaess',
             'min' => ':attribute minimal :min karakter ya coy',
             'max' => 'attribute makasimal :max karakter gaess',
-            'numeric' => ':attribute kudu diisi angka cak!!',
-            'mimes' => 'file :attribute harus bertipe :mimes'
         ];
-        $validateData = $request->validate([
-            'id_siswa' => '',
-            'jenis_kontak_id' => 'required',
-            'deskripsi' => 'required|max:225',
-        ], $message);
+        $validateData = $request->validate([], $message);
 
-        kontak::create($validateData);
-        Session::flash('success', 'Selamat!!! Project Anda Berhasil Ditambahkan');
+        kontak::create([
+            'id_siswa' => $request->id_siswa,
+            'jenis_kontak' => $request->sosmed,
+            
+        ]);
+        Session::flash('benar', 'Selamat!!! Kontak Anda Berhasil Ditambahkan');
         return redirect('/masterkontak');
     }
 
@@ -77,9 +87,9 @@ class KontakController extends Controller
      */
     public function edit($id)
     {
-        $kontak - kontak::find($id);
-        $siswa = siswa::find($id);
-        return view('EditKontak', compact('kontak', 'siswa'));
+        $kontak = kontak::find($id);
+        $jenis_kontak = jenis_kontak::all();
+        return view('/EditKontak', compact('kontak', 'jenis_kontak'));
     }
 
     /**
@@ -91,7 +101,23 @@ class KontakController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+        $message = [
+            'required' => ';attribute isi woi',
+            'min' => ':attribute minimal :min karakter woi',
+            'max' => ':attribute maksimal :max karakter woi'
+        ];
+        $validateData = $request->validate([
+            'nama_jenis_kontak' => 'required'
+            
+        ], $message);
+
+        $kontak = kontak::find($id);
+        $kontak->jenis_kontak_id = $request->sosmed;
+        $kontak->deskripsi = $request->deskripsi;
+        $kontak->save();
+        // kontak::find($id)->update($validateData);
+        Session::flash('update', 'Selamat!!! Kontak Anda Berhasil Diupdate');
+        return redirect('/masterkontak');
     }
 
     /**
@@ -102,9 +128,13 @@ class KontakController extends Controller
      */
     public function destroy($id)
     {
-        $kontak=kontak::find($id)->delete();
-        Session::flash('success', 'Data berhasil dihapus');
-        return redirect ('/masterkontak');
+        //
     }
 
+    public function hapus($id)
+    {
+        $siswa = kontak::find($id)->delete();
+        Session::flash('danger', 'Data Berhasil Dihapus :(');
+        return redirect('/masterkontak');
+    }
 }

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreign('jenis_kontak_id')->references('id')->on('jenis_kontak')
                     ->onDelete('cascade')
                     ->onUpdate('cascade');
-            $table->char('deskipsi');
+            $table->char('deskripsi');
             $table->timestamps();
     
         });

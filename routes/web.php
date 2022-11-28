@@ -6,6 +6,7 @@ use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\KontakController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\JenisKontakController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,12 +28,18 @@ use App\Http\Controllers\LoginController;
 //mastersiswa
 Route::middleware('auth')->group(function(){
     Route::resource('/dashboard',DashboardController::class);
+
     Route::get('mastersiswa/{id_siswa}/hapus',[SiswaController::class,'hapus'])->name('mastersiswa.hapus');
     Route::resource('/mastersiswa',SiswaController::class);
+
     Route::get('masterproject/create/{id_siswa}',[ProjectController::class,'tambah'])->name('masterproject.tambah');
     Route::get('masterproject/{id_siswa}/hapus',[ProjectController::class,'hapus'])->name('masterproject.hapus');
     Route::resource('/masterproject',ProjectController::class);
+
     Route::resource('/masterkontak',KontakController::class);
+
+    Route::resource('/tambahjeniskontak',JenisKontakController::class);
+    
     Route::post('logout',[LoginController::class,'logout']);
 
 });

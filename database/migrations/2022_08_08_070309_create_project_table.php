@@ -16,9 +16,11 @@ return new class extends Migration
         Schema::create('project', function (Blueprint $table) {
                 $table->id();
                 $table->unsignedBigInteger('id_siswa');
-                $table->foreign('id_siswa')->references('id')->on('siswa');
+                $table->foreign('id_siswa')->references('id')->on('siswa')
+                    ->onDelete('cascade')
+                    ->onUpdate('cascade');
                 $table->string('nama_project');
-                $table->text('deskipsi');
+                $table->text('deskripsi');
                 $table->date('tanggal');
                 $table->timestamps();
         });
