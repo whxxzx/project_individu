@@ -23,6 +23,7 @@ class KontakController extends Controller
     {
         $student = siswa::paginate(7);
         $jenis_kontak = jenis_kontak::all();
+        
         return view('masterkontak', compact('student', 'jenis_kontak'));
     }
 
@@ -32,15 +33,19 @@ class KontakController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    { $siswa = siswa::find($id);
-        $jenis_kontak = jenis_kontak::all();
-        return view('TambahKontak', compact('siswa', 'jenis_kontak'));
+    { 
+       //
     }
 
 
     public function tambah($id)
     {
-       
+        $siswa = siswa::find($id);
+        $jenis_kontak = jenis_kontak :: all();
+        
+        // $kontak = siswa::find($id)->kontak()->get();
+        // return $kontak;
+        return view('TambahKontak', compact('siswa','jenis_kontak'));
     }
     /**
      * Store a newly created resource in storage.
@@ -53,15 +58,18 @@ class KontakController extends Controller
         
         $message = [
             'required' => ':attribute harus diisi gaess',
-            'min' => ':attribute minimal :min karakter ya coy',
-            'max' => 'attribute makasimal :max karakter gaess',
         ];
-        $validateData = $request->validate([], $message);
+        $validateData = $request->validate([
+
+            // 'jenis_kontak_id' =>'required',
+            // 'deskripsi' =>'required'
+
+        ], $message);
 
         kontak::create([
-            'id_siswa' => $request->id_siswa,
-            'jenis_kontak' => $request->sosmed,
-            
+            'siswa_id' => $request->siswa_id,
+            'jenis_kontak_id' => $request->jenis_kontak_id,
+            'deskripsi'     => $request-> deskripsi
         ]);
         Session::flash('benar', 'Selamat!!! Kontak Anda Berhasil Ditambahkan');
         return redirect('/masterkontak');
@@ -76,6 +84,7 @@ class KontakController extends Controller
     public function show($id)
     {
         $kontak = siswa::find($id)->kontak()->get();
+        // return $kontak;
         return view('ShowKontak', compact('kontak'));
     }
 
@@ -89,7 +98,7 @@ class KontakController extends Controller
     {
         $kontak = kontak::find($id);
         $jenis_kontak = jenis_kontak::all();
-        return view('/EditKontak', compact('kontak', 'jenis_kontak'));
+        return view('/EditKontak', compact('kontak','jenis_kontak'));
     }
 
     /**
@@ -107,12 +116,13 @@ class KontakController extends Controller
             'max' => ':attribute maksimal :max karakter woi'
         ];
         $validateData = $request->validate([
-            'nama_jenis_kontak' => 'required'
+            'jenis_kontak_id' => 'required',
+            'deskripsi'     => 'required|min:10'
             
         ], $message);
 
         $kontak = kontak::find($id);
-        $kontak->jenis_kontak_id = $request->sosmed;
+        $kontak->jenis_kontak_id = $request->jenis_kontak_id;
         $kontak->deskripsi = $request->deskripsi;
         $kontak->save();
         // kontak::find($id)->update($validateData);

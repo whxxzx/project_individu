@@ -124,13 +124,13 @@ class JenisKontakController extends Controller
      */
     public function destroy($id)
     {
-        //
+       //
     }
 
     public function hapus($id)
     {
         $jenis_kontak=jenis_kontak::find($id)->delete();
-        Session::flash('hapus', 'Data berhasil dihapus');
+        Session::flash ('hapus', 'Data berhasil dihapus');
         return redirect('/masterkontak');
     }
 }

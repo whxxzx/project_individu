@@ -37,9 +37,12 @@ Route::middleware('auth')->group(function(){
     Route::resource('/masterproject',ProjectController::class);
 
     Route::resource('/masterkontak',KontakController::class);
-
-    Route::resource('/tambahjeniskontak',JenisKontakController::class);
+    Route::get('masterkontak/{id_siswa}/hapus',[KontakController::class,'hapus'])->name('masterkontak.hapus');
     
+    Route::resource('/tambahjeniskontak',JenisKontakController::class);
+    Route::get('tambahjeniskontak/{siswa_id}/hapus',[JenisKontakController::class,'hapus'])->name('tambahjeniskontak.hapus');
+    Route::get('masterkontak/create/{siswa_id}',[KontakController::class,'tambah'])->name('masterkontak.tambah');
+
     Route::post('logout',[LoginController::class,'logout']);
 
 });

@@ -25,6 +25,8 @@
     </div>
 </div>
 
+
+<link href="{{ asset('template/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
 <!-- Bootstrap core JavaScript-->
 <script src="{{asset('template/vendor/jquery/jquery.min.js')}}"></script>
 <script src="{{asset('template/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
