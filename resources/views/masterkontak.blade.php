@@ -82,6 +82,7 @@
                 </div>
                         <div class="card-body" id="kontak">
                             <div class="text-center">
+                                <h5>Belum Punya Kontak</h5>
                         </div>
                     </div>
                 </div>
